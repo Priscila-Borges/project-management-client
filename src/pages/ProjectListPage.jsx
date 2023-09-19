@@ -9,8 +9,14 @@ function ProjectListPage() {
     const [projects, setProjects] = useState([]);
 
     const getAllProjects = () => {
+
+        const storedToken = localStorage.getItem("authToken");
+
         axios
-            .get(`${import.meta.env.VITE_API_URL}/api/projects`)
+            .get(
+                `${import.meta.env.VITE_API_URL}/api/projects`,
+                { headers: { Authorization: `Bearer ${storedToken}` } }
+            )
             .then((response) => setProjects(response.data))
             .catch((error) => console.log(error));
     };

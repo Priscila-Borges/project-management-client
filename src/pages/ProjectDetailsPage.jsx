@@ -10,8 +10,14 @@ function ProjectDetailsPage(props) {
     const { projectId } = useParams();
 
     const getProject = () => {
-        axios
-            .get(`${import.meta.env.VITE_API_URL}/api/projects/${projectId}`)
+
+        const storedToken = localStorage.getItem("authToken");
+
+        aaxios
+            .get(
+                `${import.meta.env.VITE_API_URL}/api/projects/${projectId}`,
+                { headers: { Authorization: `Bearer ${storedToken}` } }
+            )
             .then((response) => {
                 const oneProject = response.data;
                 setProject(oneProject);
