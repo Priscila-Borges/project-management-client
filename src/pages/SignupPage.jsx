@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import authService from "../services/auth.service";
 
 function SignupPage(props) {
     const [email, setEmail] = useState("");
@@ -14,35 +14,36 @@ function SignupPage(props) {
     const handlePassword = (e) => setPassword(e.target.value);
     const handleName = (e) => setName(e.target.value);
 
-
     const handleSignupSubmit = (e) => {
         e.preventDefault();
-
+        // Create an object representing the request body
         const requestBody = { email, password, name };
 
-        axios.post(`${import.meta.env.VITE_API_URL}/auth/signup`, requestBody)
+        // Make an axios request to the API
+        // If POST request is successful redirect to login page
+        // If the request resolves with an error, set the error message in the state
+
+        // axios.post(`${API_URL}/auth/signup`, requestBody)
+
+        authService
+            .signup(requestBody)
             .then((response) => {
-                navigate('/login');
+                navigate("/login");
             })
             .catch((error) => {
                 const errorDescription = error.response.data.message;
                 setErrorMessage(errorDescription);
-            })
+            });
     };
 
     return (
         <div className="SignupPage">
             <h1>Sign Up</h1>
-    
+
             <form onSubmit={handleSignupSubmit}>
                 <label>Email:</label>
-                <input
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={handleEmail}
-                />
-    
+                <input type="email" name="email" value={email} onChange={handleEmail} />
+
                 <label>Password:</label>
                 <input
                     type="password"
@@ -50,26 +51,19 @@ function SignupPage(props) {
                     value={password}
                     onChange={handlePassword}
                 />
-    
+
                 <label>Name:</label>
-                <input
-                    type="text"
-                    name="name"
-                    value={name}
-                    onChange={handleName}
-                />
-    
+                <input type="text" name="name" value={name} onChange={handleName} />
+
                 <button type="submit">Sign Up</button>
             </form>
-    
+
             {errorMessage && <p className="error-message">{errorMessage}</p>}
-    
+
             <p>Already have account?</p>
             <Link to={"/login"}> Login</Link>
         </div>
-    )
-};
-
-
+    );
+}
 
 export default SignupPage;

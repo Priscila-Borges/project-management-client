@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import projectsService from "../services/projects.service";
 
 function AddProject(props) {
     const [title, setTitle] = useState("");
@@ -8,17 +8,16 @@ function AddProject(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
         const requestBody = { title, description };
 
-        const storedToken = localStorage.getItem('authToken');
+        // axios
+        //   .post(
+        //     `${API_URL}/api/projects`,
+        //     requestBody,
+        //     { headers: { Authorization: `Bearer ${storedToken}` } }
+        //   )
 
-        axios
-            .post(
-                `${import.meta.env.VITE_API_URL}/api/projects`,
-                requestBody,
-                { headers: { Authorization: `Bearer ${storedToken}` } }
-            )
+        projectsService.createProject(requestBody)
             .then((response) => {
                 // Reset the state
                 setTitle("");
@@ -27,6 +26,7 @@ function AddProject(props) {
             })
             .catch((error) => console.log(error));
     };
+
 
     return (
         <div className="AddProject">
